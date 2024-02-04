@@ -1,4 +1,5 @@
 use std::env;
+use std::fmt;
 
 enum Filesize {
     Bytes(u64),
@@ -44,7 +45,6 @@ impl Filesize {
     }
 }
 
-#[derive(Debug)]
 struct ComparedSizes {
     bytes: u64,
     kilo_bytes: f64,
@@ -64,6 +64,17 @@ impl ComparedSizes {
             giga_bytes: bytes as f64 / 1_000_000_000.0,
             tera_bytes: bytes as f64 / 1_000_000_000_000.0,
         }
+    }
+}
+
+
+impl fmt::Debug for ComparedSizes {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "Sizes {{ bytes: \"{} bytes\", kilobytes: \"{} kilobytes\", megabytes: \"{} megabytes\", gigabytes: \"{} gigabytes\" }}",
+            self.bytes, self.kilo_bytes, self.mega_bytes, self.giga_bytes
+        )
     }
 }
 
