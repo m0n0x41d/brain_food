@@ -1,1 +1,0 @@
-/Users/m0n0x41d/Repos/github/brain_food/coursera_rust_specialization/size_formatter/target/debug/size_formatter: /Users/m0n0x41d/Repos/github/brain_food/coursera_rust_specialization/size_formatter/src/main.rs
