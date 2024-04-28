@@ -67,7 +67,6 @@ impl ComparedSizes {
     }
 }
 
-
 impl fmt::Debug for ComparedSizes {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
