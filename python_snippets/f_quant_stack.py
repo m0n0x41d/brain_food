@@ -4,30 +4,35 @@ from dataclasses import dataclass
 from enum import Enum, auto
 import pytest
 
+
 class PushStatus(Enum):
     NIL = auto()
     OK = auto()
     ERR = auto()
+
 
 class PopStatus(Enum):
     NIL = auto()
     OK = auto()
     ERR = auto()
 
+
 class PeekStatus(Enum):
     NIL = auto()
     OK = auto()
     ERR = auto()
 
-T = TypeVar('T')
-S = TypeVar('S', bound='AbstractBoundedStack[T, any]') # type: ignore[valid-type]
+
+T = TypeVar("T")
+S = TypeVar("S", bound="AbstractBoundedStack[T, any]")  # type: ignore[valid-type]
+
 
 class AbstractBoundedStack(Generic[T, S]):
     _element_type: Type[T]
-    
+
     def __init__(self, element_type: Type[T]) -> None:
         self._element_type = element_type
-        
+
     @property
     def peek_status(self) -> PeekStatus:
         raise NotImplementedError
@@ -59,8 +64,9 @@ class AbstractBoundedStack(Generic[T, S]):
     def size(self) -> int:
         raise NotImplementedError
 
+
 @dataclass
-class BoundedStack(AbstractBoundedStack[T, 'BoundedStack[T]']):
+class BoundedStack(AbstractBoundedStack[T, "BoundedStack[T]"]):
     _element_type: Type[T]
     _stack: tuple[T, ...] = ()
     _max_size: int = 32
@@ -84,10 +90,15 @@ class BoundedStack(AbstractBoundedStack[T, 'BoundedStack[T]']):
     def max_size(self) -> int:
         return self._max_size
 
-    def push(self, value: T) -> 'BoundedStack[T]':
+    @classmethod
+    def __call__(cls, _element_type: Type[T]) -> "BoundedStack[T]":
+        """Factory method for creating properly typed stacks"""
+        return cls(_element_type=_element_type)
+
+    def push(self, value: T) -> "BoundedStack[T]":
         if not isinstance(value, self._element_type):
             raise TypeError(f"Expected {self._element_type}, got {type(value)}")
-            
+
         if self.size() >= self.max_size:
             return BoundedStack(
                 self._element_type,
@@ -95,7 +106,7 @@ class BoundedStack(AbstractBoundedStack[T, 'BoundedStack[T]']):
                 self._max_size,
                 self._peek_status,
                 self._pop_status,
-                PushStatus.ERR
+                PushStatus.ERR,
             )
         return BoundedStack(
             self._element_type,
@@ -103,10 +114,10 @@ class BoundedStack(AbstractBoundedStack[T, 'BoundedStack[T]']):
             self._max_size,
             self._peek_status,
             self._pop_status,
-            PushStatus.OK
+            PushStatus.OK,
         )
 
-    def pop(self) -> 'BoundedStack[T]':
+    def pop(self) -> "BoundedStack[T]":
         if self.size() > 0:
             return BoundedStack(
                 self._element_type,
@@ -114,7 +125,7 @@ class BoundedStack(AbstractBoundedStack[T, 'BoundedStack[T]']):
                 self._max_size,
                 self._peek_status,
                 PopStatus.OK,
-                self._push_status
+                self._push_status,
             )
         return BoundedStack(
             self._element_type,
@@ -122,20 +133,20 @@ class BoundedStack(AbstractBoundedStack[T, 'BoundedStack[T]']):
             self._max_size,
             self._peek_status,
             PopStatus.ERR,
-            self._push_status
+            self._push_status,
         )
 
-    def clear(self) -> 'BoundedStack[T]':
+    def clear(self) -> "BoundedStack[T]":
         return BoundedStack(
             self._element_type,
             (),
             self._max_size,
             PeekStatus.NIL,
             PopStatus.NIL,
-            PushStatus.NIL
+            PushStatus.NIL,
         )
 
-    def peek(self) -> tuple[T, 'BoundedStack[T]']:
+    def peek(self) -> tuple[T, "BoundedStack[T]"]:
         if self.size() > 0:
             return self._stack[-1], BoundedStack(
                 self._element_type,
@@ -143,27 +154,22 @@ class BoundedStack(AbstractBoundedStack[T, 'BoundedStack[T]']):
                 self._max_size,
                 PeekStatus.OK,
                 self._pop_status,
-                self._push_status
+                self._push_status,
             )
         raise ValueError("Stack is empty")
 
     def size(self) -> int:
         return len(self._stack)
 
-    @classmethod
-    def new_stack(cls, _element_type: Type[T]) -> 'BoundedStack[T]':
-        """Factory method for creating properly typed stacks"""
-        return cls(_element_type=_element_type)
-
 
 class TestBoundedStack:
     @pytest.fixture
     def empty_stack(self) -> BoundedStack[int]:
-        return BoundedStack.new_stack(int)
+        return BoundedStack(int)
 
     @pytest.fixture
     def stack_with_items(self) -> BoundedStack[int]:
-        stack = BoundedStack.new_stack(int)
+        stack = BoundedStack(int)
         stack = stack.push(1)
         return stack.push(2)
 
@@ -220,11 +226,11 @@ class TestBoundedStack:
         assert stack.push_status == PushStatus.NIL
 
     def test_type_safety(self) -> None:
-        stack = BoundedStack.new_stack(str)
+        stack = BoundedStack(str)
         stack = stack.push("hello")
         value, _ = stack.peek()
         assert isinstance(value, str)
-        
+
         with pytest.raises(TypeError):
             stack.push(123)
 
