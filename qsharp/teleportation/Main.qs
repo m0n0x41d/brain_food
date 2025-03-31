@@ -67,11 +67,7 @@ namespace Quantum.Kata.Teleportation {
     operation SendMessage(qAlice : Qubit, qMessage : Qubit) : (Bool, Bool) {
         CNOT(qMessage, qAlice);
         H(qMessage);
-
-        let b1 = M(qMessage);
-        let b2 = M(qAlice);
-
-        return (ResultAsBool(b1), ResultAsBool(b2));
+        return (M(qMessage) == One, M(qAlice) == One);
     }
 
 
@@ -126,27 +122,19 @@ namespace Quantum.Kata.Teleportation {
     //      Represent measurement result 'One' as 'true' and 'Zero' as 'false'.
     // The state of the qubit qAlice in the end of the operation doesn't matter.
     operation PrepareAndSendMessage(qAlice : Qubit, basis : Pauli, state : Bool) : (Bool, Bool) {
-        // qubit for message
         use qMessage = Qubit();
-
-        if (state) {
+        if state == One {
             X(qMessage);
         }
-
-        if (basis == PauliX) {
+        if basis != PauliZ {
             H(qMessage);
-        } elif (basis == PauliY) {
-            H(qMessage);
+        }
+        if basis == PauliY {
             S(qMessage);
         }
-
-        // qMessage should be prepared here, so we can use it in SendMessage
-        // to entangle it with qAlice
-        let result = SendMessage(qAlice, qMessage);
-
+        let classicalBits = SendMessage(qAlice, qMessage);
         Reset(qMessage);
-
-        return result;
+        return classicalBits;
     }
 
 
@@ -298,17 +286,11 @@ namespace Quantum.Kata.Teleportation {
 
     // Task 2.1. Reconstruct the message if the entangled qubits were in the state |Φ⁻⟩ = (|00⟩ - |11⟩) / sqrt(2).
     operation ReconstructMessage_PhiMinus(qBob : Qubit, (b1 : Bool, b2 : Bool)) : Unit {
-        if (not b1 and not b2) {
+        if not b1 {
             Z(qBob);
-        } elif (not b1 and b2) {
-            Z(qBob);
+        }
+        if b2 {
             X(qBob);
-        } elif (b1 and not b2) {
-            // Identity - do nothing
-        } else {
-            // b1 and b2
-            X(qBob);
-            Z(qBob);
         }
     }
 
@@ -330,15 +312,10 @@ namespace Quantum.Kata.Teleportation {
 
     // Task 2.3. Reconstruct the message if the entangled qubits were in the state |Ψ⁻⟩ = (|01⟩ - |10⟩) / sqrt(2).
     operation ReconstructMessage_PsiMinus(qBob : Qubit, (b1 : Bool, b2 : Bool)) : Unit {
-        if (not b1 and not b2) {
+        if not b1 {
             Z(qBob);
-            X(qBob);
-        } elif (not b1 and b2) {
-            Z(qBob);
-        } elif (b1 and not b2) {
-            Y(qBob);
-        } else {
-            // b1 and b2
+        }
+        if not b2 {
             X(qBob);
         }
     }
