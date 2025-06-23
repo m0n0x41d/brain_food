@@ -64,6 +64,8 @@ class AbstractBoundedStack(Generic[T, S]):
     def size(self) -> int:
         raise NotImplementedError
 
+T = TypeVar("T")
+S = TypeVar("S", bound="AbstractBoundedStack[T, any]")  # type: ignore[valid-type]
 
 @dataclass
 class BoundedStack(AbstractBoundedStack[T, "BoundedStack[T]"]):
