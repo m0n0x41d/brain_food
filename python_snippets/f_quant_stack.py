@@ -1,7 +1,9 @@
 from __future__ import annotations
-from typing import TypeVar, Generic, Type
+
 from dataclasses import dataclass
 from enum import Enum, auto
+from typing import Generic, Type, TypeVar
+
 import pytest
 
 
@@ -64,8 +66,10 @@ class AbstractBoundedStack(Generic[T, S]):
     def size(self) -> int:
         raise NotImplementedError
 
+
 T = TypeVar("T")
 S = TypeVar("S", bound="AbstractBoundedStack[T, any]")  # type: ignore[valid-type]
+
 
 @dataclass
 class BoundedStack(AbstractBoundedStack[T, "BoundedStack[T]"]):
