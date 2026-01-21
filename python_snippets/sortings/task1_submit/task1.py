@@ -11,6 +11,9 @@ def SelectionSortStep(array: list[int], i: int):
         array[i], array[min_idx] = array[min_idx], array[i]
 
 
+# O(1) for memory.
+# O(n) for time for this particular function.
+# The whole bubble sort will take O(n^2) in the worst case and O(n) in the best case (when the array is already sorted).
 def BubbleSortStep(array: list[int]) -> bool:
     is_swapped = False
 
