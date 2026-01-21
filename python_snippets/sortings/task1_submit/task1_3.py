@@ -22,10 +22,10 @@ def test_SelectionSortStep(array: list[int], i: int, expected: list[int]):
 
 def test_BubbleSortStep():
     array = [4, 3, 1, 2]
-    assert BubbleSortStep(array) is True
+    assert BubbleSortStep(array) is False
     assert array == [3, 1, 2, 4]
 
-    assert BubbleSortStep(array) is True
+    assert BubbleSortStep(array) is False
     assert array == [1, 2, 3, 4]
 
-    assert BubbleSortStep(array) is False
+    assert BubbleSortStep(array) is True

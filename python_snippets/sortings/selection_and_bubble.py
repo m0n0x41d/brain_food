@@ -22,4 +22,4 @@ def BubbleSortStep(array: list[int]) -> bool:
             array[i], array[i + 1] = array[i + 1], array[i]
             is_swapped = True
 
-    return is_swapped
+    return not is_swapped
