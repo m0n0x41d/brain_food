@@ -1,6 +1,7 @@
 import pytest
 
-from sortings.insertion_sort import InsertionSortStep
+from sortings.insertion_sort_step import InsertionSortStep
+from sortings.shell_sort import ShellSort
 
 
 @pytest.mark.parametrize(
@@ -21,4 +22,25 @@ from sortings.insertion_sort import InsertionSortStep
 )
 def test_InsertionSortStep(array: list[int], step: int, i: int, expected: list[int]):
     InsertionSortStep(array, step, i)
+    assert array == expected
+
+
+@pytest.mark.parametrize(
+    "array,expected",
+    [
+        ([7, 6, 5, 4, 3, 2, 1], [1, 2, 3, 4, 5, 6, 7]),
+        ([4, 3, 1, 2], [1, 2, 3, 4]),
+        ([1, 2, 3, 4], [1, 2, 3, 4]),
+        ([4, 3, 2, 1], [1, 2, 3, 4]),
+        ([5], [5]),
+        ([2, 1], [1, 2]),
+        ([1, 2], [1, 2]),
+        ([], []),
+        ([3, 1, 4, 1, 5, 9, 2, 6], [1, 1, 2, 3, 4, 5, 6, 9]),
+        ([5, 5, 5, 5], [5, 5, 5, 5]),
+        ([1, 3, 2, 3, 1], [1, 1, 2, 3, 3]),
+    ],
+)
+def test_ShellSort(array: list[int], expected: list[int]):
+    ShellSort(array)
     assert array == expected
