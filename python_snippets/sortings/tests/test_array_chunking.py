@@ -33,6 +33,7 @@ def test_ArrayChunk_task_example(array: list[int], expected_index: int, expected
         [5, 4, 3, 2, 1],
         [2, 1],
         [1, 2],
+        [1, 3, 4, 6, 5, 2, 8],
     ],
 )
 def test_ArrayChunk_valid_partition(array: list[int]):
