@@ -44,7 +44,7 @@ def ArrayChunk(M: list[int]) -> int:
 
             # Pointers have met, and left item is less than right,
             # so the partition is complete.
-            if i1 == i2 or (i1 == i2 -1 and M[i1] < M[i2]):
+            if i1 >= i2 or (i1 == i2 - 1 and M[i1] < M[i2]):
                 return pivot_element_index
 
             # If we end up here it means the items at both
