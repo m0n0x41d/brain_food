@@ -5,6 +5,8 @@
 # pointers meet on neighboring elements in the wrong order.
 # In a very worst case, if every re-scan makes minimal progress,
 # we might face O(n^2); however, it seems like a very unlikely scenario.
+#
+# minimal testsuit: https://github.com/m0n0x41d/brain_food/blob/main/python_snippets/sortings/tests/test_array_chunking.py
 def ArrayChunk(M: list[int]) -> int:
     """
     Partition the array in-place into two groups around a pivot element
