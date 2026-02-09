@@ -5,19 +5,22 @@
 # pointers meet on neighboring elements in the wrong order.
 # In a very worst case, if every re-scan makes minimal progress,
 # we might face O(n^2); however, it seems like a very unlikely scenario.
-def ArrayChunk(M: list[int]) -> int:
+def ArrayChunk(M: list[int], left = 0, right = None) -> int:
     """
     Partition the array in-place into two groups around a pivot element
     (the middle element). Elements smaller than the pivot end up on the left,
     elements larger — on the right. Returns the final index of the pivot.
     """
 
+    if right is None:
+        right = len(M) - 1
+
     while True:
-        pivot_element_index = len(M) // 2
+        pivot_element_index = (left + right) // 2
         pivot_element_value = M[pivot_element_index]
 
-        i1 = 0
-        i2 = len(M) - 1
+        i1 = left
+        i2 = right
 
         # Scan and swap items until pointers meet
         while True:
