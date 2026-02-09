@@ -5,21 +5,22 @@
 # pointers meet on neighboring elements in the wrong order.
 # In a very worst case, if every re-scan makes minimal progress,
 # we might face O(n^2); however, it seems like a very unlikely scenario.
-#
-# minimal testsuit: https://github.com/m0n0x41d/brain_food/blob/main/python_snippets/sortings/tests/test_array_chunking.py
-def ArrayChunk(M: list[int]) -> int:
+def ArrayChunk(M: list[int], left = 0, right = None) -> int:
     """
     Partition the array in-place into two groups around a pivot element
     (the middle element). Elements smaller than the pivot end up on the left,
     elements larger — on the right. Returns the final index of the pivot.
     """
 
+    if right is None:
+        right = len(M) - 1
+
     while True:
-        pivot_element_index = len(M) // 2
+        pivot_element_index = (left + right) // 2
         pivot_element_value = M[pivot_element_index]
 
-        i1 = 0
-        i2 = len(M) - 1
+        i1 = left
+        i2 = right
 
         # Scan and swap items until pointers meet
         while True:
@@ -59,3 +60,15 @@ def ArrayChunk(M: list[int]) -> int:
                 pivot_element_index = i1
             i1 += 1
             i2 -= 1
+
+
+def QuickSort(array: list[int], left:int, right: int):
+    # We need to check if left >= right because there might be cases when
+    # left will jump over to the right in some chunking scenarios;
+    # thus, this will lead to endless recursions.
+    if left >= right:
+        return
+
+    N = ArrayChunk(array, left, right)
+    QuickSort(array, left, N-1)
+    QuickSort(array, N+1, right)
