@@ -1,6 +1,6 @@
 import pytest
 
-from sortings.quick_sort import QuickSort
+from sortings.quick_sort_tail_req import QuickSortTailOptimization
 
 
 @pytest.mark.parametrize(
@@ -18,7 +18,7 @@ from sortings.quick_sort import QuickSort
         [10, -1, 0, 3, -5, 7],
     ],
 )
-def test_QuickSort(array: list[int]):
+def test_QuickSortTailOptimization(array: list[int]):
     expected = sorted(array)
-    QuickSort(array, 0, len(array) - 1)
+    QuickSortTailOptimization(array, 0, len(array) - 1)
     assert array == expected

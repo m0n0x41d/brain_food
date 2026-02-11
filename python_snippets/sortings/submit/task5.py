@@ -5,7 +5,7 @@
 # pointers meet on neighboring elements in the wrong order.
 # In a very worst case, if every re-scan makes minimal progress,
 # we might face O(n^2); however, it seems like a very unlikely scenario.
-def ArrayChunk(M: list[int], left = 0, right = None) -> int:
+def ArrayChunk(M: list[int], left=0, right=None) -> int:
     """
     Partition the array in-place into two groups around a pivot element
     (the middle element). Elements smaller than the pivot end up on the left,
@@ -62,7 +62,7 @@ def ArrayChunk(M: list[int], left = 0, right = None) -> int:
             i2 -= 1
 
 
-def QuickSort(array: list[int], left:int, right: int):
+def QuickSort(array: list[int], left: int, right: int):
     # We need to check if left >= right because there might be cases when
     # left will jump over to the right in some chunking scenarios;
     # thus, this will lead to endless recursions.
@@ -70,5 +70,5 @@ def QuickSort(array: list[int], left:int, right: int):
         return
 
     N = ArrayChunk(array, left, right)
-    QuickSort(array, left, N-1)
-    QuickSort(array, N+1, right)
+    QuickSort(array, left, N - 1)
+    QuickSort(array, N + 1, right)
