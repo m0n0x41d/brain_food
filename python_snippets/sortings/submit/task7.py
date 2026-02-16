@@ -62,20 +62,32 @@ def ArrayChunk(M: list[int], left=0, right=None) -> int:
             i2 -= 1
 
 
-# Quick sort with tail recursive optimization works with the same efficiency
-# as the two-rec-calls implementation (O(N log N) approximately and O(N^2 in the worst case)),
-# but with tail recursion optimization, we are winning in stack size.
-def QuickSortTailOptimization(array: list[int], left: int, right: int):
-    oritiginal_right = right
+# task 7
+#
+# This implementation follows the function signature
+# required by the laboratory test server interface.
+# However, this return type feels weak here:
+# a typed two-value record/tuple would be clearer.
+def KthOrderStatisticsStep(
+    Array: list[int],
+    L: int | None,
+    R: int | None,
+    k: int,
+) -> list[int]:
+    left = 0 if L is None else L
+    right = len(Array) - 1 if R is None else R
 
-    if left >= right:
-        return
+    n = ArrayChunk(Array, left, right)
 
-    # Here we replace one of the two recursive calls with a while loop
-    # to process the right part of the array iteratively.
-    # This way the call stack grows ~2x slower: only the left branch
-    # adds stack frames, while the right branch is handled in-place by the loop.
-    while left < right:
-        N = ArrayChunk(array, left, right)
-        right = N - 1
-    QuickSortTailOptimization(array, N + 1, oritiginal_right)
+    if n < k:
+        new_left = n + 1
+        new_right = right
+    elif n > k:
+        new_left = left
+        new_right = n - 1
+    else:
+        # The k-th order statistic has been found.
+        new_left = n
+        new_right = n
+
+    return [new_left, new_right]
