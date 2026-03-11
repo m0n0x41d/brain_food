@@ -55,7 +55,8 @@ class BinarySearch:
     def GetResult(self) -> int:
         return int(self.search_status)
 
-    def GallopingSearch(self, sorted_array: list[int], N: int) -> bool:
+    @staticmethod
+    def GallopingSearch(sorted_array: list[int], N: int) -> bool:
         if not sorted_array:
             return False
 
@@ -69,7 +70,6 @@ class BinarySearch:
 
             while bs.GetResult() == SearchStatus.IN_PROGRESS:
                 bs.Step(N)
-                self.current_checking_index = bs.current_checking_index
 
             return bs.GetResult() == SearchStatus.FOUND
 
@@ -78,7 +78,6 @@ class BinarySearch:
 
         while True:
             current_index = min(calc_current_index(i), last_index)
-            self.current_checking_index = current_index
             check_value = sorted_array[current_index]
 
             if check_value == N:
@@ -93,3 +92,7 @@ class BinarySearch:
                 return False
 
             i += 1
+
+
+def GallopingSearch(sorted_array: list[int], N: int) -> bool:
+    return BinarySearch.GallopingSearch(sorted_array, N)

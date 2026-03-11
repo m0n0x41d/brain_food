@@ -1,6 +1,6 @@
 import pytest
 
-from sortings.exponential_search import BinarySearch
+from sortings.exponential_search import BinarySearch, GallopingSearch
 
 
 @pytest.mark.parametrize(
@@ -23,20 +23,27 @@ def test_GallopingSearch_returns_false_for_missing_values(
 
 
 @pytest.mark.parametrize(
-    ("array", "target", "expected_index"),
+    ("array", "target"),
     [
-        ([1], 1, 0),
-        ([1, 3, 5, 7], 1, 0),
-        ([1, 3, 5, 7], 3, 1),
-        ([1, 3, 5, 7], 5, 2),
-        ([1, 3, 5, 7], 7, 3),
-        ([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 10, 9),
+        ([1], 1),
+        ([1, 3, 5, 7], 1),
+        ([1, 3, 5, 7], 3),
+        ([1, 3, 5, 7], 5),
+        ([1, 3, 5, 7], 7),
+        ([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 10),
     ],
 )
-def test_GallopingSearch_finds_existing_values(
-    array: list[int], target: int, expected_index: int
-):
+def test_GallopingSearch_finds_existing_values(array: list[int], target: int):
     searcher = BinarySearch(array)
 
     assert searcher.GallopingSearch(array, target) is True
-    assert searcher.current_checking_index == expected_index
+
+
+def test_GallopingSearch_can_be_called_autonomously_from_class():
+    assert BinarySearch.GallopingSearch([1, 3, 5, 7], 5) is True
+    assert BinarySearch.GallopingSearch([1, 3, 5, 7], 6) is False
+
+
+def test_GallopingSearch_can_be_called_as_module_function():
+    assert GallopingSearch([1, 3, 5, 7], 5) is True
+    assert GallopingSearch([1, 3, 5, 7], 6) is False
