@@ -81,7 +81,9 @@ if __name__ == "__main__":
     print(order_loop)
 
 
-### simple math
+### Simple math, same number is... same number?
+# Yes, but how does that happen, same waaay or not?
+# IT DOES NOT MATTER!!!?? WDYM?
 
 left = 2 + 3
 right = 10 // 2
