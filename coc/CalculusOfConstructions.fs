@@ -1,12 +1,12 @@
 module CalculusOfConstructions
 
 (*
-    Course core transcribed from pages 2-7 of the saved third course.
+    Course core transcribed from pages 2-12 of the saved third course.
 
     The saved pages use eval and equate without defining them. Their definitions
     below are a direct F# translation of the matching OCaml source, CoC-60.ml.
 
-    The assignment from page 8 is intentionally not implemented here.
+    Assignments are intentionally kept in separate scripts.
 *)
 
 type Term =
@@ -58,6 +58,10 @@ let rec infer (lvl: int) (ctx: Term list) (term: Term) : Term =
     | Pi (a, f) ->
         discard (infer_sort lvl ctx a)
             (infer_sort (lvl + 1) (eval a :: ctx) (f (Go lvl)))
+    | Appl (m, n) ->
+        match infer lvl ctx m with
+        | Pi (a, f) -> discard (check lvl ctx (n, a)) (f n)
+        | m_ty -> panic lvl m "Want Π, got %s" (pp lvl m_ty)
     | Ann (m, a) -> discard (infer_sort lvl ctx a) (check lvl ctx (m, eval a))
     | Go x -> List.item (lvl - x - 1) ctx
     | Star -> Box
